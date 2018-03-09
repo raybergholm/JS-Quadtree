@@ -15,14 +15,14 @@ const addItem = () => {
 
 };
 
-const Quadtree = (bounds, configOverride) => {
-    const me = {};
-    me.config = handleConfig(...configOverride);
+// const Quadtree = (bounds, configOverride) => {
+//     const me = {};
+//     me.config = handleConfig(...configOverride);
 
-    me.root = node(me.config)(bounds);
+//     me.root = node(me.config)(bounds);
 
-    return me;
-};
+//     return me;
+// };
 
 const methods = {
     each: callback => this.root.each(callback)
@@ -34,9 +34,11 @@ const attributesTemplate = {
     root: null,
 };
 
-export default () => {
+function Quadtree() {
 
     const attributes = Object.assign({}, attributesTemplate);
 
     return Object.assign({}, ...attributes, ...methods);
-};
+}
+
+export default Quadtree;

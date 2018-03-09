@@ -63,13 +63,13 @@ const attributesTemplate = {
     dividers: DEFAULT_DIVIDERS
 };
 
-export default ({
+function QuadtreeNode({
     bounds,
     dividers = DEFAULT_DIVIDERS,
     parent = null,
     quadrantDirection = null,
     items = []
-}) => {
+}){
     const _nodeId = parent ? `${parent._nodeId}-${quadrantDirection}` : root;
 
     const attributes = Object.assign({}, attributesTemplate, {
@@ -81,4 +81,6 @@ export default ({
     });
 
     return Object.assign({}, ...attributes, ...methods);
-};
+}
+
+export default QuadtreeNode;
