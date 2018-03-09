@@ -33,13 +33,13 @@ describe("Dividers class testing", () => {
                 x: 30
             }), {
                 x: 30,
-                y: 0
+                y: 50
             })).to.be.true;
 
             expect(dividerChecker(new Divider({
                 y: 25
             }), {
-                x: 0,
+                x: 50,
                 y: 25
             })).to.be.true;
         });
