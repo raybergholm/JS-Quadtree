@@ -35,10 +35,11 @@ const attributesTemplate = {
 };
 
 function Quadtree() {
+    const me = {};
 
     const attributes = Object.assign({}, attributesTemplate);
 
-    return Object.assign({}, ...attributes, ...methods);
+    return Object.assign(me, ...attributes, ...methods);
 }
 
 export default Quadtree;

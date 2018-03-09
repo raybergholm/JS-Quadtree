@@ -40,11 +40,16 @@ export const isEnclosing = (reference, target) => !(target.x < reference.x ||
     target.y < reference.y ||
     target.y + target.height > reference.y + reference.height);
 
-export const mapEnclosedBounds = (reference, targets) => targets.filter((target) => isEnclosing(reference, target));
+export const isIntersecting = (reference, target) => {
+
+};
+
+export const filterEnclosedBounds = (reference, targets) => targets.filter((target) => isEnclosing(reference, target));
 
 // curried object: since each node generally keeps the same bounds and methods get called using that as a reference
 export default (reference) => ({
     splitBounds: dividers => splitBounds(reference, dividers),
     isEnclosing: target => isEnclosing(reference, target),
-    mapEnclosedBounds: targets => mapEnclosedBounds(reference, targets)
+    isIntersecting: target => isIntersecting(reference, target),
+    filterEnclosedBounds: targets => filterEnclosedBounds(reference, targets)
 });

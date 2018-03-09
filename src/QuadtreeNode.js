@@ -38,7 +38,7 @@ const removeItem = (item) => {
 
 // depth-first traversal
 const each = (callback) => {
-    callback(this.items, this);
+    callback(this);
 
     if (this.children) {
         this.children.forEach(child => child.each(callback));
