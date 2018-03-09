@@ -10,37 +10,38 @@ import Divider, {
     DefaultDivider
 } from "../src/spatial/Divider";
 
-const dividerChecker = (reference, expected) => reference.x === expected.x &&
+const equalityChecker = (reference, expected) => reference.x === expected.x &&
     reference.y === expected.y;
 
 describe("Dividers class testing", () => {
     describe("Normal use cases", () => {
         it("No parameters result in defaults", () => {
-            const divider = new Divider();
-            expect(dividerChecker(divider, DefaultDivider)).to.be.true;
+            expect(equalityChecker(new Divider(), DefaultDivider)).to.be.true;
         });
 
         it("Passing parameters should not result in defaults", () => {
-            const divider = new Divider({
+            expect(equalityChecker(new Divider({
                 x: 30,
                 y: 25
-            });
-            expect(dividerChecker(divider, DefaultDivider)).to.be.false;
+            }), {
+                x: 30,
+                y: 25
+            })).to.be.true;
         });
 
         it("Partial parameters should be ok", () => {
-            expect(dividerChecker(new Divider({
-                x: 30
+            expect(equalityChecker(new Divider({
+                x: 75,
             }), {
-                x: 30,
+                x: 75,
                 y: 50
             })).to.be.true;
 
-            expect(dividerChecker(new Divider({
-                y: 25
+            expect(equalityChecker(new Divider({
+                y: 75
             }), {
                 x: 50,
-                y: 25
+                y: 75
             })).to.be.true;
         });
     });
@@ -88,10 +89,19 @@ describe("Dividers class testing", () => {
             })).to.throw();
         });
 
-        it("Arrays should throw", () => {
+        it("Populated arrays should throw", () => {
             expect(() => new Divider({
-                y: []
+                y: [1, 2, 3]
             })).to.throw();
+        });
+
+        it("Empty array insanity: isNaN([]) gets coerced to 0", () => {
+            expect(equalityChecker(new Divider({
+                y: []
+            }), {
+                x: 50,
+                y: 0
+            })).to.be.true;
         });
 
         it("Objects should throw", () => {
