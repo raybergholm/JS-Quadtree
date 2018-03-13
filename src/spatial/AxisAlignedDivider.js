@@ -3,7 +3,7 @@ export const DefaultDivider = {
     y: 50
 };
 
-function Divider(params) {
+export default function AxisAlignedDivider(params) {
     let {
         x = DefaultDivider.x, y = DefaultDivider.y
     } = params ? params : DefaultDivider;
@@ -20,5 +20,3 @@ function Divider(params) {
         };
     }
 }
-
-export default Divider;

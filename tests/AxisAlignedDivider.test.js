@@ -6,9 +6,9 @@ import {
     expect
 } from "chai";
 
-import Divider, {
+import AxisAlignedDivider, {
     DefaultDivider
-} from "../src/spatial/Divider";
+} from "../src/spatial/AxisAlignedDivider";
 
 const equalityChecker = (reference, expected) => reference.x === expected.x &&
     reference.y === expected.y;
@@ -16,11 +16,11 @@ const equalityChecker = (reference, expected) => reference.x === expected.x &&
 describe("Dividers class testing", () => {
     describe("Normal use cases", () => {
         it("No parameters result in defaults", () => {
-            expect(equalityChecker(new Divider(), DefaultDivider)).to.be.true;
+            expect(equalityChecker(new AxisAlignedDivider(), DefaultDivider)).to.be.true;
         });
 
         it("Passing parameters should not result in defaults", () => {
-            expect(equalityChecker(new Divider({
+            expect(equalityChecker(new AxisAlignedDivider({
                 x: 30,
                 y: 25
             }), {
@@ -30,14 +30,14 @@ describe("Dividers class testing", () => {
         });
 
         it("Partial parameters should be ok", () => {
-            expect(equalityChecker(new Divider({
+            expect(equalityChecker(new AxisAlignedDivider({
                 x: 75,
             }), {
                 x: 75,
                 y: 50
             })).to.be.true;
 
-            expect(equalityChecker(new Divider({
+            expect(equalityChecker(new AxisAlignedDivider({
                 y: 75
             }), {
                 x: 50,
@@ -48,55 +48,55 @@ describe("Dividers class testing", () => {
 
     describe("Invalid use cases", () => {
         it("Negative input should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 x: -25,
                 y: 50
             })).to.throw();
 
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 x: -1
             })).to.throw();
 
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: -100
             })).to.throw();
         });
 
         it("Input >100 should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 x: 1000,
                 y: 50
             })).to.throw();
 
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 x: 100.1
             })).to.throw();
 
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: 101
             })).to.throw();
         });
 
         it("Strings should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: "this is bad input"
             })).to.throw();
         });
 
         it("String emojis should throw too", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: "😲"
             })).to.throw();
         });
 
         it("Populated arrays should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: [1, 2, 3]
             })).to.throw();
         });
 
         it("Empty array insanity: isNaN([]) gets coerced to 0", () => {
-            expect(equalityChecker(new Divider({
+            expect(equalityChecker(new AxisAlignedDivider({
                 y: []
             }), {
                 x: 50,
@@ -105,13 +105,13 @@ describe("Dividers class testing", () => {
         });
 
         it("Objects should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: {x: 42, y: 42}
             })).to.throw();
         });
 
         it("Functions should throw", () => {
-            expect(() => new Divider({
+            expect(() => new AxisAlignedDivider({
                 y: () => 42
             })).to.throw();
         });

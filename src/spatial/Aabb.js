@@ -1,14 +1,16 @@
-export const ZeroBounds = {
+export const ZeroAabb = {
     x: 0,
     y: 0,
     width: 0,
     height: 0
 };
 
-function Bounds(params) {
+export const isAabb = (obj) => typeof obj === "object" && obj.x && obj.y && obj.width && obj.height;
+
+export default function Aabb(params) {
     let {
-        x = ZeroBounds.x, y = ZeroBounds.y, width = ZeroBounds.width, height = ZeroBounds.height
-    } = params ? params : ZeroBounds;
+        x = ZeroAabb.x, y = ZeroAabb.y, width = ZeroAabb.width, height = ZeroAabb.height
+    } = params ? params : ZeroAabb;
 
     if (isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height)) {
         throw new Error("Invalid Bounds input", params);
@@ -26,5 +28,3 @@ function Bounds(params) {
         };
     }
 }
-
-export default Bounds;
