@@ -65,11 +65,10 @@ export const isEnclosing = (reference, target) => xRelation(reference, target) =
 
 export const isEnclosedBy = (reference, target) => isEnclosing(target, reference);
 
-export const isIntersecting = (reference, target) => xRelation(reference, target) === RELATIONSHIPS.INTERSECTING 
-    || yRelation(reference, target) === RELATIONSHIPS.INTERSECTING;
-
 export const isOutOfBounds = (reference, target) => xRelation(reference, target) === RELATIONSHIPS.OUT_OF_BOUNDS 
-    && yRelation(reference, target) === RELATIONSHIPS.OUT_OF_BOUNDS;
+    || yRelation(reference, target) === RELATIONSHIPS.OUT_OF_BOUNDS;
+
+export const isIntersecting = (reference, target) => !isOutOfBounds(reference, target);
 
 export const filterEnclosing = (reference, targets) => targets.filter(target => isEnclosing(reference, target));
 
