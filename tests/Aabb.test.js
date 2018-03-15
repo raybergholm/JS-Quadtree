@@ -15,7 +15,7 @@ const equalityChecker = (reference, expected) => reference.x === expected.x &&
     reference.width === expected.width &&
     reference.height === expected.height;
 
-describe("Bounds class testing", () => {
+describe("AABB class testing", () => {
     describe("Normal use cases", () => {
         it("No parameters result in zeroed bounds", () => {
             const zeroed = new Aabb();
