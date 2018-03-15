@@ -19,9 +19,9 @@ const relation = (reference, target, prop, modifier) => {
     }
 };
 
-const xRelation = (reference, target) => relation(reference, target, "x", "width");
+export const xRelation = (reference, target) => relation(reference, target, "x", "width");
 
-const yRelation = (reference, target) => relation(reference, target, "y", "height");
+export const yRelation = (reference, target) => relation(reference, target, "y", "height");
 
 export const split = (reference, dividers) => {
     const fulcrumX = 100 / dividers.x;
