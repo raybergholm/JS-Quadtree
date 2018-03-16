@@ -24,36 +24,36 @@ export const xRelation = (reference, target) => relation(reference, target, "x",
 export const yRelation = (reference, target) => relation(reference, target, "y", "height");
 
 export const split = (reference, dividers) => {
-    const fulcrumX = 100 / dividers.x;
-    const fulcrumY = 100 / dividers.y;
+    const xRatios = [dividers.x / 100, (100 - dividers.x) / 100];
+    const yRatios = [dividers.y / 100, (100 - dividers.y) / 100];
 
-    const horizontalSplitPoint = (reference.x + reference.width) / fulcrumX;
-    const verticalSplitPoint = (reference.y + reference.height) / fulcrumY;
+    const horizontalSplitPoint = reference.x + (reference.width * xRatios[0]);
+    const verticalSplitPoint = reference.y + (reference.height * yRatios[0]);
 
     return {
         ne: new Aabb({
             x: horizontalSplitPoint,
             y: reference.y,
-            width: reference.width - horizontalSplitPoint,
-            height: verticalSplitPoint - reference.y
+            width: reference.width * xRatios[1],
+            height: reference.height * yRatios[0]
         }),
         nw: new Aabb({
             x: reference.x,
             y: reference.y,
-            width: horizontalSplitPoint - reference.x,
-            height: verticalSplitPoint - reference.y
+            width: reference.width * xRatios[0],
+            height: reference.height * yRatios[0]
         }),
         sw: new Aabb({
             x: reference.x,
             y: verticalSplitPoint,
-            width: horizontalSplitPoint - reference.x,
-            height: reference.height - verticalSplitPoint
+            width: reference.width * xRatios[0],
+            height: reference.height * yRatios[1]
         }),
         se: new Aabb({
             x: horizontalSplitPoint,
             y: verticalSplitPoint,
-            width: reference.width - horizontalSplitPoint,
-            height: reference.height - verticalSplitPoint
+            width: reference.width * xRatios[1],
+            height: reference.height * yRatios[1]
         })
     };
 };
