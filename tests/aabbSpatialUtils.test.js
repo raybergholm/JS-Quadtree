@@ -7,15 +7,18 @@ import {
 } from "chai";
 
 import Aabb, {
-    ZeroAabb
+    aabbEquals
 } from "../src/spatial/Aabb";
 
 import aabbSpatialUtils, {
     xRelation,
     yRelation,
-    split,
     RELATIONSHIPS
 } from "../src/spatial/aabbSpatialUtils";
+
+import AxisAlignedDivider, {
+    DefaultDivider
+} from "../src/spatial/AxisAlignedDivider";
 
 describe("aabbSpatialUtils tests", () => {
     describe("X-axis sanity tests", () => {
@@ -268,5 +271,249 @@ describe("aabbSpatialUtils tests", () => {
                 expect(result).to.be.an("array").and.have.members([insideAabb, outsideAabb, intersectingAabb, leftEdgeTouchingAabb, rightEdgeTouchingAabb]);
             });
         });
+    });
+
+    describe("AABB split tests", () => {
+        describe("Starting from origin", () => {
+            const refAabb = new Aabb({
+                x: 0,
+                y: 0,
+                width: 100,
+                height: 100
+            });
+
+            const wrappedRef = aabbSpatialUtils(refAabb);
+
+            const splitBoundsEquals = (ref, target) => {
+                const keys = ["ne", "nw", "sw", "se"];
+                expect(ref).to.have.all.keys(keys);
+                expect(target).to.have.all.keys(keys);
+
+                const notMatching = Object.keys(ref).filter((key) => !aabbEquals(ref[key], target[key]));
+                return notMatching.length === 0 ? true : notMatching;
+            };
+
+            it("Split with default dividers (50-50 split)", () => {
+                const expectedResult = {
+                    ne: new Aabb({
+                        x: 50,
+                        y: 0,
+                        width: 50,
+                        height: 50
+                    }),
+                    nw: new Aabb({
+                        x: 0,
+                        y: 0,
+                        width: 50,
+                        height: 50
+                    }),
+                    sw: new Aabb({
+                        x: 0,
+                        y: 50,
+                        width: 50,
+                        height: 50
+                    }),
+                    se: new Aabb({
+                        x: 50,
+                        y: 50,
+                        width: 50,
+                        height: 50
+                    }),
+                };
+                const result = wrappedRef.split(DefaultDivider);
+
+                expect(result).to.be.an("object");
+                expect(splitBoundsEquals(result, expectedResult)).to.be.true;
+            });
+
+            it("Split with specific dividers (25-25 split)", () => {
+                const expectedResult = {
+                    ne: new Aabb({
+                        x: 25,
+                        y: 0,
+                        width: 75,
+                        height: 25
+                    }),
+                    nw: new Aabb({
+                        x: 0,
+                        y: 0,
+                        width: 25,
+                        height: 25
+                    }),
+                    sw: new Aabb({
+                        x: 0,
+                        y: 25,
+                        width: 25,
+                        height: 75
+                    }),
+                    se: new Aabb({
+                        x: 25,
+                        y: 25,
+                        width: 75,
+                        height: 75
+                    }),
+                };
+                const quarteredDivider = new AxisAlignedDivider({
+                    x: 25,
+                    y: 25
+                });
+                const result = wrappedRef.split(quarteredDivider);
+
+                expect(result).to.be.an("object");
+                expect(splitBoundsEquals(result, expectedResult)).to.be.true;
+            });
+
+            it("Split with specific dividers (25-75 split)", () => {
+                const expectedResult = {
+                    ne: new Aabb({
+                        x: 25,
+                        y: 0,
+                        width: 75,
+                        height: 75
+                    }),
+                    nw: new Aabb({
+                        x: 0,
+                        y: 0,
+                        width: 25,
+                        height: 75
+                    }),
+                    sw: new Aabb({
+                        x: 0,
+                        y: 75,
+                        width: 25,
+                        height: 25
+                    }),
+                    se: new Aabb({
+                        x: 25,
+                        y: 75,
+                        width: 75,
+                        height: 25
+                    }),
+                };
+                const rectangularDivider = new AxisAlignedDivider({
+                    x: 25,
+                    y: 75
+                });
+                const result = wrappedRef.split(rectangularDivider);
+
+                expect(result).to.be.an("object");
+                expect(splitBoundsEquals(result, expectedResult)).to.be.true;
+            });
+        });
+
+        // describe("Across axes", () => {
+        //     const refAabb = new Aabb({
+        //         x: -100,
+        //         y: -100,
+        //         width: 200,
+        //         height: 200
+        //     });
+
+        //     const wrappedRef = aabbSpatialUtils(refAabb);
+
+        //     it("Split with default dividers (50-50 split)", () => {
+        //         const expectedResult = {
+        //             ne: new Aabb({
+        //                 x: 0,
+        //                 y: -100,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             nw: new Aabb({
+        //                 x: -100,
+        //                 y: -100,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             sw: new Aabb({
+        //                 x: -100,
+        //                 y: 0,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             se: new Aabb({
+        //                 x: 0,
+        //                 y: 0,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //         };
+        //         const result = wrappedRef.split(DefaultDivider);
+
+        //         expect(result).to.be.an("object").and.to.equal(expectedResult);
+        //     });
+
+        //     it("Split with specific dividers (25-25 split)", () => {
+        //         const expectedResult = {
+        //             ne: new Aabb({
+        //                 x: -50,
+        //                 y: -100,
+        //                 width: 150,
+        //                 height: 50
+        //             }),
+        //             nw: new Aabb({
+        //                 x: -100,
+        //                 y: -100,
+        //                 width: 50,
+        //                 height: 50
+        //             }),
+        //             sw: new Aabb({
+        //                 x: -100,
+        //                 y: -50,
+        //                 width: 50,
+        //                 height: 150
+        //             }),
+        //             se: new Aabb({
+        //                 x: -50,
+        //                 y: -50,
+        //                 width: 150,
+        //                 height: 150
+        //             }),
+        //         };
+        //         const quarterDivider = new AxisAlignedDivider({
+        //             x: 25,
+        //             y: 25
+        //         });
+        //         const result = wrappedRef.split(quarterDivider);
+
+        //         expect(result).to.be.an("object").and.to.equal(expectedResult);
+        //     });
+
+        //     it("Split with specific dividers (25-75 split)", () => {
+        //         const expectedResult = {
+        //             ne: new Aabb({
+        //                 x: 0,
+        //                 y: -100,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             nw: new Aabb({
+        //                 x: -100,
+        //                 y: -100,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             sw: new Aabb({
+        //                 x: -100,
+        //                 y: 0,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //             se: new Aabb({
+        //                 x: 0,
+        //                 y: 0,
+        //                 width: 100,
+        //                 height: 100
+        //             }),
+        //         };
+        //         const rectangleDivider = new AxisAlignedDivider({
+        //             x: 25,
+        //             y: 75
+        //         });
+        //         const result = wrappedRef.split(rectangleDivider);
+
+        //         expect(result).to.be.an("object").and.to.equal(expectedResult);
+        //     });
+        // });
     });
 });

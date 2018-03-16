@@ -34,26 +34,26 @@ export const split = (reference, dividers) => {
         ne: new Aabb({
             x: horizontalSplitPoint,
             y: reference.y,
-            width: reference.width / (100 / fulcrumX),
-            height: reference.height / fulcrumY
+            width: reference.width - horizontalSplitPoint,
+            height: verticalSplitPoint - reference.y
         }),
         nw: new Aabb({
             x: reference.x,
             y: reference.y,
-            width: reference.width / fulcrumX,
-            height: reference.height / fulcrumY
+            width: horizontalSplitPoint - reference.x,
+            height: verticalSplitPoint - reference.y
         }),
         sw: new Aabb({
             x: reference.x,
             y: verticalSplitPoint,
-            width: reference.width / fulcrumX,
-            height: reference.height / (100 / fulcrumY)
+            width: horizontalSplitPoint - reference.x,
+            height: reference.height - verticalSplitPoint
         }),
         se: new Aabb({
             x: horizontalSplitPoint,
             y: verticalSplitPoint,
-            width: reference.width / (100 / fulcrumX),
-            height: reference.height / (100 / fulcrumY)
+            width: reference.width - horizontalSplitPoint,
+            height: reference.height - verticalSplitPoint
         })
     };
 };

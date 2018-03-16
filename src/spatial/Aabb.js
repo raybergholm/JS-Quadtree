@@ -7,6 +7,8 @@ export const ZeroAabb = {
 
 export const isAabb = (obj) => typeof obj === "object" && obj.x && obj.y && obj.width && obj.height;
 
+export const aabbEquals = (left, right) => left.x === right.x && left.y === right.y && left.width === right.width && left.height === right.height;
+
 export default function Aabb(params) {
     let {
         x = ZeroAabb.x, y = ZeroAabb.y, width = ZeroAabb.width, height = ZeroAabb.height
