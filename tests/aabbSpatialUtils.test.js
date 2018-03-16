@@ -23,11 +23,11 @@ describe("aabbSpatialUtils tests", () => {
             x: 0,
             width: 100
         });
-        const smallAabb = new Aabb({
+        const insideAabb = new Aabb({
             x: 25,
             width: 50
         });
-        const bigAabb = new Aabb({
+        const outsideAabb = new Aabb({
             x: -100,
             width: 500
         });
@@ -49,11 +49,11 @@ describe("aabbSpatialUtils tests", () => {
         });
 
         it("Enclosing should work", () => {
-            expect(xRelation(refAabb, smallAabb)).to.equal(RELATIONSHIPS.ENCLOSING);
+            expect(xRelation(refAabb, insideAabb)).to.equal(RELATIONSHIPS.ENCLOSING);
         });
 
         it("EnclosedBy should work", () => {
-            expect(xRelation(refAabb, bigAabb)).to.equal(RELATIONSHIPS.ENCLOSED_BY);
+            expect(xRelation(refAabb, outsideAabb)).to.equal(RELATIONSHIPS.ENCLOSED_BY);
         });
 
         it("OutOfBounds should work", () => {
@@ -74,11 +74,11 @@ describe("aabbSpatialUtils tests", () => {
             y: 0,
             height: 100
         });
-        const smallAabb = new Aabb({
+        const insideAabb = new Aabb({
             y: 25,
             height: 50
         });
-        const bigAabb = new Aabb({
+        const outsideAabb = new Aabb({
             y: -100,
             height: 500
         });
@@ -100,11 +100,11 @@ describe("aabbSpatialUtils tests", () => {
         });
 
         it("Enclosing should work", () => {
-            expect(yRelation(refAabb, smallAabb)).to.equal(RELATIONSHIPS.ENCLOSING);
+            expect(yRelation(refAabb, insideAabb)).to.equal(RELATIONSHIPS.ENCLOSING);
         });
 
         it("EnclosedBy should work", () => {
-            expect(yRelation(refAabb, bigAabb)).to.equal(RELATIONSHIPS.ENCLOSED_BY);
+            expect(yRelation(refAabb, outsideAabb)).to.equal(RELATIONSHIPS.ENCLOSED_BY);
         });
 
         it("OutOfBounds should work", () => {
@@ -127,13 +127,13 @@ describe("aabbSpatialUtils tests", () => {
             width: 100,
             height: 100
         });
-        const enclosedAabb = new Aabb({
+        const insideAabb = new Aabb({
             x: 25,
             y: 25,
             width: 25,
             height: 25
         });
-        const biggerAabb = new Aabb({
+        const outsideAabb = new Aabb({
             x: -50,
             y: -50,
             width: 200,
@@ -180,10 +180,10 @@ describe("aabbSpatialUtils tests", () => {
 
         describe("Single AABB - AABB tests", () => {
             it("Smaller AABB should be inside", () => {
-                expect(wrappedRef.is.enclosing(enclosedAabb)).to.be.true;
+                expect(wrappedRef.is.enclosing(insideAabb)).to.be.true;
             });
             it("... and all others should be false", () => {
-                expect(wrappedRef.is.enclosing(biggerAabb)).to.be.false;
+                expect(wrappedRef.is.enclosing(outsideAabb)).to.be.false;
                 expect(wrappedRef.is.enclosing(farAwayAabb)).to.be.false;
                 expect(wrappedRef.is.enclosing(tooFarRightAabb)).to.be.false;
                 expect(wrappedRef.is.enclosing(tooFarUpAabb)).to.be.false;
@@ -193,10 +193,10 @@ describe("aabbSpatialUtils tests", () => {
             });
 
             it("Bigger AABB should be outside", () => {
-                expect(wrappedRef.is.enclosedBy(biggerAabb)).to.be.true;
+                expect(wrappedRef.is.enclosedBy(outsideAabb)).to.be.true;
             });
             it("... and all others should be false", () => {
-                expect(wrappedRef.is.enclosedBy(enclosedAabb)).to.be.false;
+                expect(wrappedRef.is.enclosedBy(insideAabb)).to.be.false;
                 expect(wrappedRef.is.enclosedBy(farAwayAabb)).to.be.false;
                 expect(wrappedRef.is.enclosedBy(tooFarRightAabb)).to.be.false;
                 expect(wrappedRef.is.enclosedBy(tooFarUpAabb)).to.be.false;
@@ -213,8 +213,8 @@ describe("aabbSpatialUtils tests", () => {
                 expect(wrappedRef.is.outOfBounds(tooFarUpAabb)).to.be.true;
             });
             it("... and all others should be false", () => {
-                expect(wrappedRef.is.outOfBounds(enclosedAabb)).to.be.false;
-                expect(wrappedRef.is.outOfBounds(biggerAabb)).to.be.false;
+                expect(wrappedRef.is.outOfBounds(insideAabb)).to.be.false;
+                expect(wrappedRef.is.outOfBounds(outsideAabb)).to.be.false;
                 expect(wrappedRef.is.outOfBounds(intersectingAabb)).to.be.false;
                 expect(wrappedRef.is.outOfBounds(leftEdgeTouchingAabb)).to.be.false;
                 expect(wrappedRef.is.outOfBounds(rightEdgeTouchingAabb)).to.be.false;
@@ -228,14 +228,44 @@ describe("aabbSpatialUtils tests", () => {
                 expect(wrappedRef.is.intersecting(rightEdgeTouchingAabb)).to.be.true;
             });
             it("... plus enclosing/enclosed AABBs too", () => {
-                expect(wrappedRef.is.intersecting(enclosedAabb)).to.be.true;
-                expect(wrappedRef.is.intersecting(biggerAabb)).to.be.true;
+                expect(wrappedRef.is.intersecting(insideAabb)).to.be.true;
+                expect(wrappedRef.is.intersecting(outsideAabb)).to.be.true;
             });
 
             it("... and all others should be false", () => {
                 expect(wrappedRef.is.intersecting(farAwayAabb)).to.be.false;
                 expect(wrappedRef.is.intersecting(tooFarRightAabb)).to.be.false;
                 expect(wrappedRef.is.intersecting(tooFarUpAabb)).to.be.false;
+            });
+        });
+
+        describe("Filtering AABB tests", () => {
+            const allAabbs = [
+                insideAabb,
+                outsideAabb,
+                farAwayAabb,
+                tooFarRightAabb,
+                tooFarUpAabb,
+                intersectingAabb,
+                leftEdgeTouchingAabb,
+                rightEdgeTouchingAabb
+            ];
+
+            it("Enclosing filter should be correct", () => {
+                const result = wrappedRef.filter.enclosing(allAabbs);
+                expect(result).to.be.an("array").and.have.members([insideAabb]);
+            });
+            it("EnclosedBy filter should be correct", () => {
+                const result = wrappedRef.filter.enclosedBy(allAabbs);
+                expect(result).to.be.an("array").and.have.members([outsideAabb]);
+            });
+            it("OutOfBounds filter should be correct", () => {
+                const result = wrappedRef.filter.outOfBounds(allAabbs);
+                expect(result).to.be.an("array").and.have.members([farAwayAabb, tooFarRightAabb, tooFarUpAabb]);
+            });
+            it("Intersecting filter should be correct", () => {
+                const result = wrappedRef.filter.intersecting(allAabbs);
+                expect(result).to.be.an("array").and.have.members([insideAabb, outsideAabb, intersectingAabb, leftEdgeTouchingAabb, rightEdgeTouchingAabb]);
             });
         });
     });

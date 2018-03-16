@@ -74,9 +74,9 @@ export const filterEnclosing = (reference, targets) => targets.filter(target => 
 
 export const filterEnclosedBy = (reference, targets) => targets.filter(target => isEnclosedBy(reference, target));
 
-export const filterIntersecting = (reference, targets) => targets.filter(target => isIntersecting(reference, target));
-
 export const filterOutOfBounds = (reference, targets) => targets.filter(target => isOutOfBounds(reference, target));
+
+export const filterIntersecting = (reference, targets) => targets.filter(target => isIntersecting(reference, target));
 
 // curried object: since each node generally keeps the same bounds and methods get called using that as a reference
 export default (reference) => ({
