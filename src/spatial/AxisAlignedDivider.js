@@ -1,3 +1,6 @@
+/**
+ * @typedef AxisAlignedDivider
+ */
 export const DefaultDivider = {
     x: 50,
     y: 50

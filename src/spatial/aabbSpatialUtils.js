@@ -7,6 +7,13 @@ export const RELATIONSHIPS = {
     OUT_OF_BOUNDS: 3
 };
 
+/**
+ * Generic single axis relation comparator
+ * @param {object} reference 
+ * @param {object} target 
+ * @param {string} prop 
+ * @param {string} modifier 
+ */
 const relation = (reference, target, prop, modifier) => {
     if (reference[prop] > target[prop] + target[modifier] || reference[prop] + reference[modifier] < target[prop]) {
         return RELATIONSHIPS.OUT_OF_BOUNDS;
@@ -19,13 +26,28 @@ const relation = (reference, target, prop, modifier) => {
     }
 };
 
+/**
+ * X-axis relation comparator
+ * @param {{x: number, width: number}} reference 
+ * @param {{x: number, width: number}} target 
+ */
 export const xRelation = (reference, target) => relation(reference, target, "x", "width");
 
+/**
+ * Y-axis relation comparator
+ * @param {{y: number, height: number}} reference 
+ * @param {{y: number, height: number}} target 
+ */
 export const yRelation = (reference, target) => relation(reference, target, "y", "height");
 
-export const split = (reference, dividers) => {
-    const xRatios = [dividers.x / 100, (100 - dividers.x) / 100];
-    const yRatios = [dividers.y / 100, (100 - dividers.y) / 100];
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {AxisAlignedDivider} dividers 
+ */
+export const split = (reference, divider) => {
+    const xRatios = [divider.x / 100, (100 - divider.x) / 100];
+    const yRatios = [divider.y / 100, (100 - divider.y) / 100];
 
     const horizontalSplitPoint = reference.x + (reference.width * xRatios[0]);
     const verticalSplitPoint = reference.y + (reference.height * yRatios[0]);
@@ -58,24 +80,62 @@ export const split = (reference, dividers) => {
     };
 };
 
-// TODO: do these even make sense?
-
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb} target 
+ */
 export const isEnclosing = (reference, target) => xRelation(reference, target) === RELATIONSHIPS.ENCLOSING 
     && yRelation(reference, target) === RELATIONSHIPS.ENCLOSING;
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb} target 
+ */
 export const isEnclosedBy = (reference, target) => isEnclosing(target, reference);
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb} target 
+ */
 export const isOutOfBounds = (reference, target) => xRelation(reference, target) === RELATIONSHIPS.OUT_OF_BOUNDS 
     || yRelation(reference, target) === RELATIONSHIPS.OUT_OF_BOUNDS;
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb} target 
+ */
 export const isIntersecting = (reference, target) => !isOutOfBounds(reference, target);
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb[]} targets
+ */
 export const filterEnclosing = (reference, targets) => targets.filter(target => isEnclosing(reference, target));
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb[]} targets
+ */
 export const filterEnclosedBy = (reference, targets) => targets.filter(target => isEnclosedBy(reference, target));
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb[]} targets
+ */
 export const filterOutOfBounds = (reference, targets) => targets.filter(target => isOutOfBounds(reference, target));
 
+/**
+ * 
+ * @param {Aabb} reference 
+ * @param {Aabb[]} targets
+ */
 export const filterIntersecting = (reference, targets) => targets.filter(target => isIntersecting(reference, target));
 
 // curried object: since each node generally keeps the same bounds and methods get called using that as a reference
