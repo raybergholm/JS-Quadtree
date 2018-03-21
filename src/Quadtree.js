@@ -1,19 +1,54 @@
-import QuadtreeConfig from "./models/QuadtreeConfig";
-import node from "./quadtreeNode";
+import QuadtreeNode from "./quadtreeNode";
 
-import config from "./config.json";
+export const MaxItemsInNode = 5;
+export const MaxLevelsInTree = 5;
 
-const handleConfig = ({
-    maxItemsInNode = config.maxItemsInNode,
-    maxLevelsInTree = config.maxLevelsInTree
-}) => ({
-    maxItemsInNode,
-    maxLevelsInTree
-});
+export default function Quadtree({
+    bounds,
+    divider,
+    maxItemsInNode = MaxItemsInNode,
+    maxLevelsInTree = MaxLevelsInTree
+}) {
+    const attributesTemplate = {
+        _maxItemsInNode: MaxItemsInNode,
+        _maxLevelsInTree: MaxLevelsInTree,
+        _root: null
+    };
 
-const addItem = () => {
+    const attributes = Object.assign({}, attributesTemplate, {
+        _root: new QuadtreeNode({
+            bounds,
+            divider
+        }),
+        maxItemsInNode,
+        maxLevelsInTree
+    });
 
-};
+    const methods = {
+        getBounds: getBounds,
+        addItem: addItem,
+        removeItem: removeItem,
+        traverse: traverse
+    };
+
+    return Object.assign({}, attributes, methods);
+}
+
+function getBounds() {
+    return this._root.bounds;
+}
+
+function addItem(item) {
+    this._root.addItem(item);
+}
+
+function removeItem(item) {
+    this._root.removeItem(item);
+}
+
+function traverse(callback) {
+    return this._root.each(callback);
+}
 
 // const Quadtree = (bounds, configOverride) => {
 //     const me = {};
@@ -23,23 +58,3 @@ const addItem = () => {
 
 //     return me;
 // };
-
-const methods = {
-    each: callback => this.root.each(callback)
-};
-
-const attributesTemplate = {
-    maxItemsInNode: null,
-    maxLevelsInTree: null,
-    root: null,
-};
-
-function Quadtree() {
-    const me = {};
-
-    const attributes = Object.assign({}, attributesTemplate);
-
-    return Object.assign(me, ...attributes, ...methods);
-}
-
-export default Quadtree;

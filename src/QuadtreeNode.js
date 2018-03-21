@@ -1,86 +1,89 @@
-const DEFAULT_DIVIDERS = {
-    x: 50,
-    y: 50
-};
+import {
+    DefaultDivider
+} from "./spatial/AxisAlignedDivider";
 
-const isLeaf = () => !this.children;
+export default function QuadtreeNode({
+    bounds,
+    divider = DefaultDivider,
+    parent = null,
+    quadrantDirection = null,
+    items = [],
+    maxItemsInNode,
+    maxLevelsInTree
+}) {
+    const attributesTemplate = {
+        _nodeId: null,
+        bounds: null,
+        children: null,
+        dividers: DefaultDivider,
+        _maxItemsInNode: null,
+        _maxLevelsInTree: null
+    };
 
-const rebalanceItems = () => {
+    const attributes = Object.assign({}, attributesTemplate, {
+        _nodeId: parent ? `${parent._nodeId}-${quadrantDirection}` : root,
+        bounds,
+        divider,
+        parent,
+        items,
+        maxItemsInNode,
+        maxLevelsInTree
+    });
+
+    const methods = {
+        isLeaf: isLeaf,
+    
+        // item mutators
+        addItem: addItem,
+        removeItem: removeItem,
+        rebalanceItems: rebalanceItems,
+    
+        each: each
+    };
+
+    return Object.assign({}, attributes, methods);
+}
+
+function isLeaf() {
+    return !this.children;
+}
+
+function rebalanceItems() {
     console.log(`Rebalancing items in node ${this._nodeId}`);
 
-    if (this.children) {
-        this.children.forEach(child => child.rebalanceItems());
-    } else {
+    if (!this.children) {
         this.children = createChildren();
     }
-};
 
-const createChildren = () => {
+    this.children.forEach(child => child.rebalanceItems());
+}
 
-};
+function createChildren() {
 
-const addItem = (item) => {
+}
+
+function addItem(item) {
     this.items.push(item);
 
-    if (this.items.length > this.MaxItemsInNode) {
+    if (this.items.length > this._maxItemsInNode) {
         this.rebalanceItems();
     }
-};
+}
 
-const removeItem = (item) => {
+function removeItem(item) {
     const index = this.items.indexOf(item);
     if (index > -1) {
         this.items.splice(index, 1);
     } else {
         console.log(`Attempted to remove from node ${this._nodeId}, item not found: `, item);
     }
-};
+}
 
 // depth-first traversal
-const each = (callback) => {
+function each(callback) {
     callback(this);
 
     if (this.children) {
         this.children.forEach(child => child.each(callback));
     }
-};
-
-const methods = {
-    isLeaf: isLeaf,
-
-    // item mutators
-    addItem: addItem,
-    removeItem: removeItem,
-    rebalanceItems: rebalanceItems,
-
-    each: each
-};
-
-const attributesTemplate = {
-    _nodeId: null,
-    bounds: null,
-    children: null,
-    dividers: DEFAULT_DIVIDERS
-};
-
-function QuadtreeNode({
-    bounds,
-    dividers = DEFAULT_DIVIDERS,
-    parent = null,
-    quadrantDirection = null,
-    items = []
-}){
-    const _nodeId = parent ? `${parent._nodeId}-${quadrantDirection}` : root;
-
-    const attributes = Object.assign({}, attributesTemplate, {
-        _nodeId,
-        bounds,
-        dividers,
-        parent,
-        items
-    });
-
-    return Object.assign({}, ...attributes, ...methods);
 }
-
-export default QuadtreeNode;
