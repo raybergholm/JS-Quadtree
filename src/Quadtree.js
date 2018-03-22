@@ -10,9 +10,9 @@ export default function Quadtree({
     maxLevelsInTree = MaxLevelsInTree
 }) {
     const attributesTemplate = {
+        _root: null,
         _maxItemsInNode: MaxItemsInNode,
-        _maxLevelsInTree: MaxLevelsInTree,
-        _root: null
+        _maxLevelsInTree: MaxLevelsInTree
     };
 
     const attributes = Object.assign({}, attributesTemplate, {

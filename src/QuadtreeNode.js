@@ -21,7 +21,7 @@ export default function QuadtreeNode({
     };
 
     const attributes = Object.assign({}, attributesTemplate, {
-        _nodeId: parent ? `${parent._nodeId}-${quadrantDirection}` : root,
+        _nodeId: parent ? `${parent._nodeId}-${quadrantDirection}` : "root",
         bounds,
         divider,
         parent,
