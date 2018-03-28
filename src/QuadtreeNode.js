@@ -1,10 +1,10 @@
 import {
-    DefaultDivider
+    DEFAULT_DIVIDER
 } from "./spatial/AxisAlignedDivider";
 
 export default function QuadtreeNode({
     bounds,
-    divider = DefaultDivider,
+    divider = DEFAULT_DIVIDER,
     parent = null,
     quadrantDirection = null,
     items = [],
@@ -15,7 +15,7 @@ export default function QuadtreeNode({
         _nodeId: null,
         bounds: null,
         children: null,
-        dividers: DefaultDivider,
+        dividers: DEFAULT_DIVIDER,
         _maxItemsInNode: null,
         _maxLevelsInTree: null
     };

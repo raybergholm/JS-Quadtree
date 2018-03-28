@@ -17,7 +17,7 @@ import aabbSpatialUtils, {
 } from "../src/spatial/aabbSpatialUtils";
 
 import AxisAlignedDivider, {
-    DefaultDivider
+    DEFAULT_DIVIDER
 } from "../src/spatial/AxisAlignedDivider";
 
 describe("aabbSpatialUtils tests", () => {
@@ -320,7 +320,7 @@ describe("aabbSpatialUtils tests", () => {
                         height: 50
                     }),
                 };
-                const result = wrappedRef.split(DefaultDivider);
+                const result = wrappedRef.split(DEFAULT_DIVIDER);
 
                 expect(result).to.be.an("object");
                 expect(splitBoundsEquals(result, expectedResult)).to.be.true;
@@ -438,7 +438,7 @@ describe("aabbSpatialUtils tests", () => {
                         height: 100
                     }),
                 };
-                const result = wrappedRef.split(DefaultDivider);
+                const result = wrappedRef.split(DEFAULT_DIVIDER);
 
                 expect(result).to.be.an("object");
                 expect(splitBoundsEquals(result, expectedResult)).to.be.true;

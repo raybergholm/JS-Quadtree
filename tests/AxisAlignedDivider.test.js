@@ -7,7 +7,7 @@ import {
 } from "chai";
 
 import AxisAlignedDivider, {
-    DefaultDivider
+    DEFAULT_DIVIDER
 } from "../src/spatial/AxisAlignedDivider";
 
 const equalityChecker = (reference, expected) => reference.x === expected.x &&
@@ -16,7 +16,7 @@ const equalityChecker = (reference, expected) => reference.x === expected.x &&
 describe("Dividers class testing", () => {
     describe("Normal use cases", () => {
         it("No parameters result in defaults", () => {
-            expect(equalityChecker(new AxisAlignedDivider(), DefaultDivider)).to.be.true;
+            expect(equalityChecker(new AxisAlignedDivider(), DEFAULT_DIVIDER)).to.be.true;
         });
 
         it("Passing parameters should not result in defaults", () => {

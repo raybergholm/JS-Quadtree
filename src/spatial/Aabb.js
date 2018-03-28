@@ -1,20 +1,20 @@
 /**
  * @typedef Aabb
  */
-export const ZeroAabb = {
+export const ZERO_AABB = {
     x: 0,
     y: 0,
     width: 0,
     height: 0
 };
 /**
- * Returns true if this is an object with x, y, widht and height properties
+ * @summary Returns true if this is an object with x, y, widht and height properties
  * @param {object} obj 
  */
 export const isAabb = (obj) => typeof obj === "object" && obj.x && obj.y && obj.width && obj.height;
 
 /**
- * Returns true if x, y, width and height values are equals
+ * @summary Returns true if x, y, width and height values are equals
  * @param {Aabb} left 
  * @param {Aabb} right 
  */
@@ -22,8 +22,8 @@ export const aabbEquals = (left, right) => left.x === right.x && left.y === righ
 
 export default function Aabb(params) {
     let {
-        x = ZeroAabb.x, y = ZeroAabb.y, width = ZeroAabb.width, height = ZeroAabb.height
-    } = params ? params : ZeroAabb;
+        x = ZERO_AABB.x, y = ZERO_AABB.y, width = ZERO_AABB.width, height = ZERO_AABB.height
+    } = params ? params : ZERO_AABB;
 
     if (isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height)) {
         throw new Error("Invalid Bounds input", params);

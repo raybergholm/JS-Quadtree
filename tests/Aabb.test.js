@@ -7,7 +7,7 @@ import {
 } from "chai";
 
 import Aabb, {
-    ZeroAabb
+    ZERO_AABB
 } from "../src/spatial/Aabb";
 
 const equalityChecker = (reference, expected) => reference.x === expected.x &&
@@ -19,7 +19,7 @@ describe("AABB class testing", () => {
     describe("Normal use cases", () => {
         it("No parameters result in zeroed bounds", () => {
             const zeroed = new Aabb();
-            expect(equalityChecker(zeroed, ZeroAabb)).to.be.true;
+            expect(equalityChecker(zeroed, ZERO_AABB)).to.be.true;
         });
     
         it("Passing parameters should not result in zeroed bounds", () => {
@@ -29,7 +29,7 @@ describe("AABB class testing", () => {
                 width: 100,
                 height: 100
             });
-            expect(equalityChecker(area, ZeroAabb)).to.be.false;
+            expect(equalityChecker(area, ZERO_AABB)).to.be.false;
         });
     
         it("Full parameters should match", () => {
