@@ -20,6 +20,38 @@ export const isAabb = (obj) => typeof obj === "object" && obj.x && obj.y && obj.
  */
 export const aabbEquals = (left, right) => left.x === right.x && left.y === right.y && left.width === right.width && left.height === right.height;
 
+/**
+ * @summary Returns quantity number of Aabbs with random coordinates and sizes, all enclosed by the bounds
+ * @param {Aabb} bounds 
+ * @param {integer} quantity 
+ */
+export const generateRandomAabbs = (bounds, quantity) => {
+    const randomInRange = (min, max) => Math.floor(min) + Math.random() * Math.floor(max - min);
+
+    const left = bounds.x;
+    const right = bounds.x + bounds.width;
+    const top = bounds.y;
+    const bottom = bounds.y + bounds.height;
+
+    const aabbs = [];
+
+    for (let i = 0; i < quantity; i++) {
+        const x = randomInRange(left, right);
+        const y = randomInRange(top, bottom);
+        const width = randomInRange(0, right - x);
+        const height = randomInRange(0, bottom - y);
+
+        aabbs.push(new Aabb({
+            x,
+            y,
+            width,
+            height
+        }));
+    }
+
+    return aabbs;
+};
+
 export default function Aabb(params) {
     let {
         x = ZERO_AABB.x, y = ZERO_AABB.y, width = ZERO_AABB.width, height = ZERO_AABB.height
@@ -32,7 +64,7 @@ export default function Aabb(params) {
         y = Number(y);
         width = Number(width);
         height = Number(height);
-        
+
         return {
             x,
             y,
