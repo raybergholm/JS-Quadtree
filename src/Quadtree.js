@@ -11,14 +11,16 @@ export default function Quadtree({
 }) {
     const attributesTemplate = {
         _root: null,
-        _maxItemsInNode: DEFAULT_MAX_ITEMS_IN_NODE,
-        _maxLevelsInTree: DEFAULT_MAX_LEVELS_IN_TREE
+        maxItemsInNode: DEFAULT_MAX_ITEMS_IN_NODE,
+        maxLevelsInTree: DEFAULT_MAX_LEVELS_IN_TREE
     };
 
     const attributes = Object.assign({}, attributesTemplate, {
         _root: new QuadtreeNode({
             bounds,
-            divider
+            divider,
+            maxItemsInNode,
+            maxLevelsInTree
         }),
         maxItemsInNode,
         maxLevelsInTree
@@ -28,10 +30,17 @@ export default function Quadtree({
         getBounds: getBounds,
         addItem: addItem,
         removeItem: removeItem,
-        traverseTree: traverseTree
+        traverseTree: traverseTree,
+        toString: toStringOverride
     };
 
-    return Object.assign({}, attributes, methods);
+    const debug = {
+        _debug: {
+            assert: _debugAssert
+        }
+    };
+
+    Object.assign(this, attributes, methods, debug);
 }
 
 function getBounds() {
@@ -48,4 +57,14 @@ function removeItem(item) {
 
 function traverseTree(callback) {
     return this._root.each(callback);
+}
+
+function toStringOverride() {
+    return JSON.stringify(this);
+}
+
+function _debugAssert() {
+    return this.traverseTree((node) => {
+
+    });
 }

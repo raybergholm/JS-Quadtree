@@ -17,9 +17,9 @@ export default function AxisAlignedDivider(params) {
         x = Number(x);
         y = Number(y);
 
-        return {
+        Object.assign(this, {
             x,
             y
-        };
+        });
     }
 }

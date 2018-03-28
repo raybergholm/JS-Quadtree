@@ -16,8 +16,8 @@ export default function QuadtreeNode({
         bounds: null,
         children: null,
         dividers: DEFAULT_DIVIDER,
-        _maxItemsInNode: null,
-        _maxLevelsInTree: null
+        maxItemsInNode: null,
+        maxLevelsInTree: null
     };
 
     const attributes = Object.assign({}, attributesTemplate, {
@@ -41,7 +41,7 @@ export default function QuadtreeNode({
         each: each
     };
 
-    return Object.assign({}, attributes, methods);
+    Object.assign(this, attributes, methods);
 }
 
 function isLeaf() {

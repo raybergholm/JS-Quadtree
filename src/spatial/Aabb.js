@@ -65,11 +65,11 @@ export default function Aabb(params) {
         width = Number(width);
         height = Number(height);
 
-        return {
+        Object.assign(this, {
             x,
             y,
             width,
             height
-        };
+        });
     }
 }
