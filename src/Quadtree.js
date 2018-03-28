@@ -30,8 +30,7 @@ export default function Quadtree({
         getBounds: getBounds,
         addItem: addItem,
         removeItem: removeItem,
-        traverseTree: traverseTree,
-        toString: toStringOverride
+        traverseTree: traverseTree
     };
 
     const debug = {
@@ -59,12 +58,12 @@ function traverseTree(callback) {
     return this._root.each(callback);
 }
 
-function toStringOverride() {
-    return JSON.stringify(this);
-}
-
 function _debugAssert() {
     return this.traverseTree((node) => {
 
     });
 }
+
+Quadtree.prototype.toString = function() {
+    return JSON.stringify(this);
+};

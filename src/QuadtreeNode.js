@@ -87,3 +87,7 @@ function each(callback) {
         this.children.forEach(child => child.each(callback));
     }
 }
+
+QuadtreeNode.prototype.toString = function() {
+    return JSON.stringify(this);
+};

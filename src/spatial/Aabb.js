@@ -73,3 +73,7 @@ export default function Aabb(params) {
         });
     }
 }
+
+Aabb.prototype.toString = function() {
+    return JSON.stringify(this);
+};

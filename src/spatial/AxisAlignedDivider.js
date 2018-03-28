@@ -23,3 +23,7 @@ export default function AxisAlignedDivider(params) {
         });
     }
 }
+
+AxisAlignedDivider.prototype.toString = function() {
+    return JSON.stringify(this);
+};
