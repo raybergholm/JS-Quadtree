@@ -28,7 +28,7 @@ export default function Quadtree({
         getBounds: getBounds,
         addItem: addItem,
         removeItem: removeItem,
-        traverse: traverse
+        traverseTree: traverseTree
     };
 
     return Object.assign({}, attributes, methods);
@@ -46,15 +46,6 @@ function removeItem(item) {
     this._root.removeItem(item);
 }
 
-function traverse(callback) {
+function traverseTree(callback) {
     return this._root.each(callback);
 }
-
-// const Quadtree = (bounds, configOverride) => {
-//     const me = {};
-//     me.config = handleConfig(...configOverride);
-
-//     me.root = node(me.config)(bounds);
-
-//     return me;
-// };
