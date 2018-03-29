@@ -1,3 +1,5 @@
+import aabbSpatialUtils from "./aabbSpatialUtils";
+
 /**
  * @typedef Aabb
  */
@@ -71,9 +73,11 @@ export default function Aabb(params) {
             width,
             height
         });
+
+        Object.assign(this, aabbSpatialUtils(this));
     }
 }
 
-Aabb.prototype.toString = function() {
+Aabb.prototype.toString = function () {
     return JSON.stringify(this);
 };

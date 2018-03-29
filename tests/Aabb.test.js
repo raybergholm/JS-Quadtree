@@ -137,7 +137,7 @@ describe("AABB class testing", () => {
 
         it("10000 randomly generated AABBs should all be inside the parent area", () => {
             for (const aabb of randomAabbs) {
-                expect(aabbSpatialUtils(aabb).is.enclosedBy(bounds)).to.be.true;
+                expect(aabb.is.enclosedBy(bounds)).to.be.true;
             }
         });
     });
