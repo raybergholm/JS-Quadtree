@@ -89,12 +89,16 @@ describe("Quadtree testing", () => {
     });
 
     it("Add 1000 new items with constant sizes: should have more items ending up in leaves", () => {
+        const localQuadtree = new Quadtree({
+            bounds
+        });
+
         const aabbs = generateRandomAabbs(bounds, 1000);
         let id = 0;
         for (const aabb of aabbs) {
-            aabb.width = 25;
-            aabb.height = 25;
-            quadtree.addItem({
+            aabb.width = 5;
+            aabb.height = 5;
+            localQuadtree.addItem({
                 _id: id++,
                 bounds: aabb
             });
@@ -104,8 +108,10 @@ describe("Quadtree testing", () => {
         const preOrderCallback = (node) => {
             console.log(`${node._nodeId} is at level ${node._level} and has ${node.items.size} items`);
         };
-        quadtree.traverseTree({
+        localQuadtree.traverseTree({
             preOrderCallback
         });
+
+        expect(localQuadtree.countItems()).to.be.equal(1000);
     });
 });
