@@ -42,7 +42,12 @@ export default function QuadtreeNode({
         removeItem: removeItem,
         clearItems: clearItems,
         rebalanceItems: rebalanceItems,
+
+        // children
         createChildren: createChildren,
+
+        // update tree state
+        updateNode: updateNode,
 
         each: each
     };
@@ -61,25 +66,7 @@ function rebalanceItems() {
         this.createChildren();
     }
 
-    // check if items can go downwards
-    if (this.children) {
-        this.children.forEach((child) => {
-            for (const item of this.items) {
-                if (aabbSpatialUtils(child.bounds).is.enclosing(item.bounds)) {
-                    child.addItem(item);
-                    this.removeItem(item);
-                }
-            }
-        });
-    }
-
-    // check if items can go upwards (this shouldn't end up in a recursive loop since both parent and child are using enclosing)
-    for (const item of this.items) {
-        if (this.parent && !aabbSpatialUtils(this.bounds).is.enclosing(item.bounds)) {
-            this.parent.addItem(item);
-            this.removeItem(item);
-        }
-    }
+    this.updateNode();
 }
 
 function createChildren() {
@@ -128,6 +115,31 @@ function clearItems(isRecursive = true) {
     isRecursive ? this.each({
         preOrderCallback: (node) => node.items.clear()
     }) : this.items.clear();
+}
+
+/**
+ * @summary Call this if items move around, this will recalculate where items should be in the tree
+ */
+function updateNode() {
+    for (const item of this.items) {
+
+        // check if items can go upwards (this shouldn't end up in a recursive loop since both parent and child are using enclosing)
+        if(this.parent && !this.bounds.is.enclosing(item.bounds)) {
+            this.parent.addItem(item);
+            this.removeItem(item);
+            continue;
+        }
+
+        // check if items can go downwards
+        if(this.children){
+            this.children.forEach((child) => {
+                if (child.bounds.is.enclosing(item.bounds)) {
+                    child.addItem(item);
+                    this.removeItem(item);
+                }
+            });
+        }
+    }
 }
 
 /**

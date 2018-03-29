@@ -32,7 +32,8 @@ export default function Quadtree({
         removeItem: removeItem,
         clearItems: clearItems,
         countItems: countItems,
-        traverseTree: traverseTree
+        traverseTree: traverseTree,
+        update: update
     };
 
     const debug = {
@@ -63,9 +64,7 @@ function clearItems(isRecursive = true) {
 function countItems() {
     let count = 0;
 
-    const preOrderCallback = (node) => {
-        count += node.items.size;
-    };
+    const preOrderCallback = (node) => count += node.items.size;
     this._root.each({
         preOrderCallback
     });
@@ -75,6 +74,13 @@ function countItems() {
 
 function traverseTree(callbacks) {
     this._root.each(callbacks);
+}
+
+function update() {
+    const postOrderCallback = (node) => node.updateNode();
+    this._root.each({
+        postOrderCallback
+    });
 }
 
 function _debugAssert() {
