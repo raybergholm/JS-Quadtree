@@ -2,10 +2,6 @@ import {
     DEFAULT_DIVIDER
 } from "./spatial/AxisAlignedDivider";
 
-import aabbSpatialUtils, {
-    split
-} from "./spatial/aabbSpatialUtils";
-
 export default function QuadtreeNode({
     bounds,
     divider = DEFAULT_DIVIDER,
@@ -70,7 +66,7 @@ function rebalanceItems() {
 }
 
 function createChildren() {
-    const childBounds = split(this.bounds, this.divider);
+    const childBounds = this.bounds.split(this.divider);
 
     this.children = new Map();
 
@@ -92,7 +88,7 @@ function addItem(item) {
     // if there are child nodes, check if a child is a better fit first. If so, toss it downwards recursively. Otherwise, this node is the best fit so far.
     if (this.children) {
         for (const entry in this.children) {
-            if (aabbSpatialUtils(entry[1].bounds).is.enclosing(item)) {
+            if (entry[1].bounds.is.enclosing(item)) {
                 entry[1].addItem(item);
                 return;
             }
