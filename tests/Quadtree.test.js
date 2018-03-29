@@ -29,29 +29,19 @@ describe("Quadtree testing", () => {
         height: 1000
     });
 
-    it("This should compile", () => {
-        const quadtree = new Quadtree(bounds);
-        expect(1).to.equal(1);
-
+    const quadtree = new Quadtree({
+        bounds
     });
 
     it("Adding an item shouldn't explode", () => {
-        const quadtree = new Quadtree({
-            bounds
-        });
-
         const aabbs = generateRandomAabbs(bounds, 1);
         quadtree.addItem({
-            _id: 1,
+            _id: 0,
             bounds: aabbs[0]
         });
     });
 
-    it("... 100 shouldn't explode either", () => {
-        const quadtree = new Quadtree({
-            bounds
-        });
-
+    it("... 100 more shouldn't explode either", () => {
         const aabbs = generateRandomAabbs(bounds, 100);
         let id = 0;
         for (const aabb of aabbs) {
