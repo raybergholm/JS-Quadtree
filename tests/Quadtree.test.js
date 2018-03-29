@@ -7,7 +7,6 @@ import {
 } from "chai";
 
 import Aabb, {
-    ZERO_AABB,
     generateRandomAabbs
 } from "../src/spatial/Aabb";
 

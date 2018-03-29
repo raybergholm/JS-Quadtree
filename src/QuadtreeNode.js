@@ -6,8 +6,6 @@ import aabbSpatialUtils, {
     split
 } from "./spatial/aabbSpatialUtils";
 
-import objectHelper from "./utils/objectHelper";
-
 export default function QuadtreeNode({
     bounds,
     divider = DEFAULT_DIVIDER,
@@ -64,32 +62,34 @@ function rebalanceItems() {
     }
 
     if (this.children) {
-        for (const prop in this.children) {
+        this.children.forEach((child) => {
             for (const item of this.items) {
-                // console.log("child:", this.children[prop]);
-                // console.log("item", item);
-                if (aabbSpatialUtils(this.children[prop].bounds).is.enclosing(item.bounds)) {
-                    this.children[prop].addItem(item);
+                if (aabbSpatialUtils(child.bounds).is.enclosing(item.bounds)) {
+                    child.addItem(item);
                     this.removeItem(item);
                 }
             }
-        }
+        });
     }
 }
 
 function createChildren() {
     const childBounds = split(this.bounds, this.divider);
 
-    this.children = objectHelper(childBounds).map((bounds, quadrantDirection) => new QuadtreeNode({
-        bounds,
-        divider: this.divider,
-        parent: this,
-        quadrantDirection,
-        maxItemsInNode: this.maxItemsInNode,
-        maxLevelsInTree: this.maxLevelsInTree
-    }));
+    this.children = new Map();
 
-    // console.log(this);
+    for (const quadrant in childBounds) {
+        const childNode = new QuadtreeNode({
+            bounds: childBounds[quadrant],
+            divider: this.divider,
+            parent: this,
+            quadrantDirection: quadrant,
+            maxItemsInNode: this.maxItemsInNode,
+            maxLevelsInTree: this.maxLevelsInTree
+        });
+
+        this.children.set(quadrant, childNode);
+    }
 }
 
 function addItem(item) {
@@ -126,12 +126,12 @@ function each(params) {
     }
 
     if (this.children) {
-        for (const prop in this.children) {
-            this.children[prop].each({
+        this.children.forEach((child) => {
+            child.each({
                 preOrderCallback,
                 postOrderCallback
             });
-        }
+        });
     }
 
     if (postOrderCallback) {
