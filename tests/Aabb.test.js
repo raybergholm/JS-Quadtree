@@ -134,9 +134,38 @@ describe("AABB class testing", () => {
         const randomAabbs = generateRandomAabbs(bounds, 10000);
 
         it("10000 randomly generated AABBs should all be inside the parent area", () => {
-            for (const aabb of randomAabbs) {
-                expect(aabb.is.enclosedBy(bounds)).to.be.true;
-            }
+            expect(bounds.filter.enclosing(randomAabbs)).lengthOf(10000);
+        });
+    });
+
+    describe("Testing moving AABBs", () => {
+        const refBounds = new Aabb({
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100
+        });
+
+        const movingBounds = new Aabb({
+            x: 50,
+            y: 50,
+            width: 20,
+            height: 20
+        });
+
+        it("movingBounds should be inside the ref at the start", () => {
+            expect(refBounds.is.enclosing(movingBounds)).to.be.true;
+        });
+
+        it("movingBounds should now be outside of the ref", () => {
+            movingBounds.x += 200;
+            expect(refBounds.is.outOfBounds(movingBounds)).to.be.true;
+        });
+
+        it("check that the subject bounds ref is also updated", () => {
+            expect(movingBounds.is.outOfBounds(refBounds)).to.be.true;
+            movingBounds.x -= 200;
+            expect(movingBounds.is.enclosedBy(refBounds)).to.be.true;
         });
     });
 });
