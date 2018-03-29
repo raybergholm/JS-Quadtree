@@ -61,6 +61,7 @@ function rebalanceItems() {
         this.createChildren();
     }
 
+    // check if items can go downwards
     if (this.children) {
         this.children.forEach((child) => {
             for (const item of this.items) {
@@ -70,6 +71,14 @@ function rebalanceItems() {
                 }
             }
         });
+    }
+
+    // check if items can go upwards (this shouldn't end up in a recursive loop since both parent and child are using enclosing)
+    for (const item of this.items) {
+        if (this.parent && !aabbSpatialUtils(this.bounds).is.enclosing(item.bounds)) {
+            this.parent.addItem(item);
+            this.removeItem(item);
+        }
     }
 }
 
@@ -93,8 +102,19 @@ function createChildren() {
 }
 
 function addItem(item) {
+    // if there are child nodes, check if a child is a better fit first. If so, toss it downwards recursively. Otherwise, this node is the best fit so far.
+    if (this.children) {
+        for (const entry in this.children) {
+            if (aabbSpatialUtils(entry[1].bounds).is.enclosing(item)) {
+                entry[1].addItem(item);
+                return;
+            }
+        }
+    }
+
     this.items.add(item);
 
+    // if this node count goes over the limit, try reallocating items to children
     if (this.items.size > this.maxItemsInNode) {
         this.rebalanceItems();
     }
