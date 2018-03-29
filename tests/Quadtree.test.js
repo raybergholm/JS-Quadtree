@@ -41,7 +41,10 @@ describe("Quadtree testing", () => {
         });
 
         const aabbs = generateRandomAabbs(bounds, 1);
-        quadtree.addItem(aabbs[0]);
+        quadtree.addItem({
+            _id: 1,
+            bounds: aabbs[0]
+        });
     });
 
     it("... 100 shouldn't explode either", () => {
@@ -50,10 +53,17 @@ describe("Quadtree testing", () => {
         });
 
         const aabbs = generateRandomAabbs(bounds, 100);
+        let id = 0;
         for (const aabb of aabbs) {
-            quadtree.addItem(aabb);
+            quadtree.addItem({
+                _id: ++id,
+                bounds: aabb
+            });
         }
 
-        console.log(quadtree);
+        quadtree.traverseTree((node) => {
+            console.log(`${node._nodeId} is at level ${node._level} and has ${node.items.size} items`);
+        });
+        // console.log(quadtree);
     });
 });
