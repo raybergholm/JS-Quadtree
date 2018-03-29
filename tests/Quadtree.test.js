@@ -10,14 +10,6 @@ import Aabb, {
     generateRandomAabbs
 } from "../src/spatial/Aabb";
 
-import AxisAlignedDivider, {
-    DEFAULT_DIVIDER
-} from "../src/spatial/AxisAlignedDivider";
-
-import aabbSpatialUtils, {
-    RELATIONSHIPS
-} from "../src/spatial/aabbSpatialUtils";
-
 import Quadtree from "../src/Quadtree";
 
 describe("Quadtree testing", () => {
@@ -65,7 +57,7 @@ describe("Quadtree testing", () => {
         // console log report to manually check the quadtree
         const postOrderCallback = (node) => {
             for (const item in node.items) {
-                if (!aabbSpatialUtils(node.bounds).is.enclosing(item)) {
+                if (!node.bounds.is.enclosing(item.bounds)) {
                     console.log("out of bounds!");
                 }
             }
@@ -88,8 +80,12 @@ describe("Quadtree testing", () => {
     });
 
     it("Add 1000 new items with constant sizes: should have more items ending up in leaves", () => {
+        const maxItemsInNode = 10;
+        const maxLevelsInTree = 3;
         const localQuadtree = new Quadtree({
-            bounds
+            bounds,
+            maxItemsInNode,
+            maxLevelsInTree
         });
 
         const aabbs = generateRandomAabbs(bounds, 1000);
