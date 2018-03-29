@@ -11,8 +11,6 @@ import Aabb, {
     generateRandomAabbs,
 } from "../src/spatial/Aabb";
 
-import aabbSpatialUtils from "../src/spatial/aabbSpatialUtils";
-
 const equalityChecker = (reference, expected) => reference.x === expected.x &&
     reference.y === expected.y &&
     reference.width === expected.width &&

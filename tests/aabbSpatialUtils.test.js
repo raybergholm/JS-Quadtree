@@ -10,7 +10,7 @@ import Aabb, {
     aabbEquals
 } from "../src/spatial/Aabb";
 
-import aabbSpatialUtils, {
+import {
     xRelation,
     yRelation,
     RELATIONSHIPS
