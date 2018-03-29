@@ -50,10 +50,62 @@ describe("Quadtree testing", () => {
                 bounds: aabb
             });
         }
+    });
 
-        quadtree.traverseTree((node) => {
+    it("tree traversal should work", () => {
+        // console log report to manually check the quadtree
+        const preOrderCallback = (node) => {
             console.log(`${node._nodeId} is at level ${node._level} and has ${node.items.size} items`);
+        };
+        quadtree.traverseTree({
+            preOrderCallback
         });
-        // console.log(quadtree);
+    });
+
+    it("Items inside each node should be inside the bounds", () => {
+        // console log report to manually check the quadtree
+        const postOrderCallback = (node) => {
+            for (const item in node.items) {
+                if (!aabbSpatialUtils(node.bounds).is.enclosing(item)) {
+                    console.log("out of bounds!");
+                }
+            }
+        };
+        quadtree.traverseTree({
+            postOrderCallback
+        });
+    });
+
+    it("Item count should be 101", () => {
+        expect(quadtree.countItems()).to.be.equal(101);
+    });
+
+    it("Clearing items should not explode", () => {
+        quadtree.clearItems(true);
+    });
+
+    it("Item count should be 0", () => {
+        expect(quadtree.countItems()).to.be.equal(0);
+    });
+
+    it("Add 1000 new items with constant sizes: should have more items ending up in leaves", () => {
+        const aabbs = generateRandomAabbs(bounds, 1000);
+        let id = 0;
+        for (const aabb of aabbs) {
+            aabb.width = 25;
+            aabb.height = 25;
+            quadtree.addItem({
+                _id: id++,
+                bounds: aabb
+            });
+        }
+
+        // console log report to manually check the quadtree
+        const preOrderCallback = (node) => {
+            console.log(`${node._nodeId} is at level ${node._level} and has ${node.items.size} items`);
+        };
+        quadtree.traverseTree({
+            preOrderCallback
+        });
     });
 });

@@ -42,6 +42,7 @@ export default function QuadtreeNode({
         // item mutators
         addItem: addItem,
         removeItem: removeItem,
+        clearItems: clearItems,
         rebalanceItems: rebalanceItems,
         createChildren: createChildren,
 
@@ -103,14 +104,38 @@ function removeItem(item) {
     return this.items.delete(item);
 }
 
-// depth-first traversal
-function each(callback) {
-    callback(this);
+function clearItems(isRecursive = true) {
+    isRecursive ? this.each({
+        preOrderCallback: (node) => node.items.clear()
+    }) : this.items.clear();
+}
+
+/**
+ * @summary Tree traversal method. Pass in pre- or post-order callbacks
+ * @param {params.preOrderCallback} function
+ * @param {params.postOrderCallback} function
+ */
+function each(params) {
+    const {
+        preOrderCallback,
+        postOrderCallback
+    } = params;
+
+    if (preOrderCallback) {
+        preOrderCallback(this);
+    }
 
     if (this.children) {
-        for(const prop in this.children){
-            this.children[prop].each(callback);
+        for (const prop in this.children) {
+            this.children[prop].each({
+                preOrderCallback,
+                postOrderCallback
+            });
         }
+    }
+
+    if (postOrderCallback) {
+        postOrderCallback(this);
     }
 }
 

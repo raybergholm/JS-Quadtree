@@ -30,6 +30,8 @@ export default function Quadtree({
         getBounds: getBounds,
         addItem: addItem,
         removeItem: removeItem,
+        clearItems: clearItems,
+        countItems: countItems,
         traverseTree: traverseTree
     };
 
@@ -54,16 +56,31 @@ function removeItem(item) {
     this._root.removeItem(item);
 }
 
-function traverseTree(callback) {
-    return this._root.each(callback);
+function clearItems(isRecursive = true) {
+    this._root.clearItems(isRecursive);
+}
+
+function countItems() {
+    let count = 0;
+
+    const preOrderCallback = (node) => {
+        count += node.items.size;
+    };
+    this._root.each({
+        preOrderCallback
+    });
+
+    return count;
+}
+
+function traverseTree(callbacks) {
+    this._root.each(callbacks);
 }
 
 function _debugAssert() {
-    return this.traverseTree((node) => {
-
-    });
+    this.traverseTree();
 }
 
-Quadtree.prototype.toString = function() {
+Quadtree.prototype.toString = function () {
     return JSON.stringify(this);
 };
